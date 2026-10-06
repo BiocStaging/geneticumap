@@ -1,0 +1,39 @@
+Package: geneticumap
+Title: Evolutionary Algorithm for UMAP-based Clustering Pipeline Parameter Optimization for Single-Cell RNA-Seq Data
+Version: 1.0.0
+Date: 2026-09-25
+Authors@R: c(
+    person("Lisa-Maria", "Winter", email = "lisa-maria-1.winter@uni-ulm.de", role = c("aut")),
+    person("Hanna", "Wagner", email = "hanna.wagner@uni-ulm.de", role = c("aut")),
+    person("Dominik", "Dreiheller", role = c("aut")),
+    person("Hans A.", "Kestler", email = "hans.kestler@uni-ulm.de", role = c("cre")))
+Description: The geneticumap package searches for single-cell clustering parameters by treating the Seurat preprocessing and clustering workflow
+    as an optimization problem. The UMAP-based clustering pipeline parameters for single-cell RNA-seq data (like resolution, number of PCs, or neighbor counts)
+    evolve using an evolutionary algorithm to systematically search for an optimal set of parameters for a given dataset.
+    The most appropriate configuration is objectively identified by the Calinski-Harabasz index.
+    The package is developed at the [Institute of Medical Systems Biology of Ulm University](https://sysbio.uni-ulm.de).
+License: MIT + file LICENSE
+Imports:
+    ecr,
+    clusterCrit,
+    Seurat,
+    BBmisc,
+    checkmate,
+    SeuratObject,
+    htmlwidgets,
+    jsonlite,
+    parallelMap,
+    plotly,
+    ggplot2,
+    parallelly
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 8.0.0
+Suggests: 
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+biocViews: GeneExpression, SingleCell, Transcriptomics, Clustering, DimensionReduction
+URL: https://github.com/sysbio-bioinf/geneticumap_evaluation

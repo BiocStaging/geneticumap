@@ -1,0 +1,97 @@
+---
+title: "Getting started with geneticumap"
+author: "Lisa-Maria Winter, Hanna Wagner, and Dominik Dreiheller"
+package: geneticumap
+output: rmarkdown::html_document
+vignette: >
+  %\VignetteIndexEntry{Getting Started with geneticumap}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+## What geneticumap does
+
+Single-cell RNA sequencing (scRNA-seq) enables the characterization of cellular heterogeneity at single-cell resolution, 
+but its interpretation relies on computational workflows for dimensionality reduction and visualization. 
+These workflows require multiple parameter choices in preprocessing, clustering, and visualization steps. 
+Although general recommendations exist, suitable parameter selection remains dataset-specific, 
+leaving manual configuration susceptible to subjectivity and poor reproducibility when incompletely reported. 
+We address this gap with geneticUMAP, an objective, dataset-specific optimization framework for configuring scRNA-seq visualization. 
+`geneticUMAP` embeds the complete workflow in a genetic algorithm and optimizes its configuration using the Calinski-Harabasz index to evaluate 
+how well the intrinsic data structure is preserved in the final visualization. 
+We applied geneticUMAP to 18 publicly available scRNA-seq datasets that span different species, tissues, and acquisition protocols. 
+Across all datasets, optimization improved structure-preserving mappings.
+Additionally, we assess the robustness under parameter perturbations and the biological relevance of the resulting visualizations. 
+Optimized configurations generally produced more robust visualizations than default settings and improved agreement with author-provided cell-type annotations for most datasets. 
+By automatically identifying a suitable configuration, geneticUMAP eliminates the need for manual parameter tuning and enables more objective and robust scRNA-seq data visualizations. 
+
+Alongside this R package, geneticumap is available as a web application at \url{https://fermat.informatik.uni-ulm.de/geneticumap}.
+
+## Installation
+
+Make sure R is installed on your system. Install the package from Bioconductor:
+
+```{r install, eval=FALSE}
+if (!require("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+BiocManager::install("geneticumap")
+```
+
+## Input data
+
+Provide `run_optimization()` with a directory containing either a 10X Genomics
+matrix (`matrix.mtx`, `barcodes.tsv`, and `features.tsv` or `genes.tsv`) or a
+10X HDF5 file (`.h5`). If the directory contains an HDF5 file, the package
+loads that file. The package applies fixed quality-control filters to every
+dataset: cells must have more than 200 and fewer than 2,500 detected features,
+and mitochondrial content must be below 5% using the `^MT-` gene-name pattern.
+
+## Run an optimization
+
+Run the example in your R session with a valid dataset path. Point `data_dir` to your input directory and `results_dir` to a results directory. 
+
+```{r run-optimization, eval=FALSE}
+library(geneticumap)
+
+data_dir <- "path/to/10x_dataset"
+results_dir <- file.path(data_dir, "geneticumap_results")
+
+run_optimization(
+  data_dir = data_dir,
+  results_dir = results_dir,
+  max_iterations = 10,
+  num_processes = 1
+)
+```
+
+The function writes its results to `results_dir`; it does not return the best
+parameter set as an R object. Read the optimized parameter set from the JSON file:
+
+```{r read-parameters, eval=FALSE}
+best_parameters <- jsonlite::read_json(
+  file.path(results_dir, "seurat-params.json"),
+  simplifyVector = TRUE
+)
+best_parameters
+```
+
+## Result files
+
+| File | What it contains |
+|:--|:--|
+| `seurat-params.json` | Selected values for the six pipeline parameters. |
+| `umap-coordinates.tsv` | One row per cell, with its barcode and two UMAP coordinates (`umap_1`, `umap_2`). |
+| `cluster-identities.tsv` | The Seurat cluster assignment for each cell barcode. These are the clusters used to calculate the CH index. |
+| `scatter-fitness.png` | Best, mean, and worst CH fitness across generations. Higher fitness is better for this optimization. |
+| `umap-static.png` | Static UMAP plot for the selected parameter set. |
+| `umap-static-default-seurat.png` | Static UMAP plot using the package's default parameter set, for comparison. |
+| `umap-interactive.html` | Interactive UMAP for the selected settings, with cluster labels and hover information for top marker genes. |
+
+The coordinate and cluster tables can be joined by `cell_id`. Comparing the
+two static plots gives a quick visual comparison between the default and
+selected settings; open the interactive HTML file for cell-level exploration.

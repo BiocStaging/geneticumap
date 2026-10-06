@@ -1,0 +1,4 @@
+^LICENSE\.md$
+^.git$
+^.idea$
+^.DS_Store$
