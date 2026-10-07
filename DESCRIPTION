@@ -36,4 +36,4 @@ Suggests:
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 biocViews: GeneExpression, SingleCell, Transcriptomics, Clustering, DimensionReduction
-URL: https://github.com/sysbio-bioinf/geneticumap_evaluation
+URL: https://github.com/sysbio-bioinf/geneticumap
