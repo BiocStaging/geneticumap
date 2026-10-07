@@ -2,6 +2,21 @@
 
 ---
 
+geneticUMAP optimizes UMAP-based clustering pipeline parameters for single-cell RNA-seq data, such as resolution, the number of principal components, and the number of neighbors. It uses an evolutionary algorithm to search for pipeline parameters for a given dataset. The Seurat preprocessing and clustering workflow is treated as an optimization problem, and the search identifies the configuration with the highest Calinski-Harabasz index.
+
+The core idea is:
+
+1. Load the 10X or h5 single-cell dataset.
+2. Run a fixed Seurat workflow with a small set of tunable parameters.
+3. Extract UMAP coordinates and cluster identities.
+4. Score the resulting clustering with the Calinski-Harabasz index.
+5. Use an evolutionary algorithm to explore the parameter space.
+6. Save the search result and export reporting artifacts for downstream analysis.
+
+The geneticUMAP package is developed at the [Institute of Medical Systems Biology of Ulm University](https://sysbio.uni-ulm.de).
+
+---
+
 ## Associated Paper (Unpublished)
 
 **geneticUMAP: Objective and Robust Parameter Optimization for scRNA-Seq Data Visualization**
@@ -15,20 +30,10 @@
 
 The associated paper has not yet been published. Once published, please cite it, if it was helpful to you. Thank you.
 
----
+## Web Application
 
-geneticUMAP optimizes UMAP-based clustering pipeline parameters for single-cell RNA-seq data, such as resolution, the number of principal components, and the number of neighbors. It uses an evolutionary algorithm to search for pipeline parameters for a given dataset. The Seurat preprocessing and clustering workflow is treated as an optimization problem, and the search identifies the configuration with the highest Calinski-Harabasz index.
-
-The core idea is:
-
-1. Load the 10X or h5 single-cell dataset.
-2. Run a fixed Seurat workflow with a small set of tunable parameters.
-3. Extract UMAP coordinates and cluster identities.
-4. Score the resulting clustering with the Calinski-Harabasz index.
-5. Use an evolutionary algorithm to explore the parameter space.
-6. Save the search result and export reporting artifacts for downstream analysis.
-
-The geneticUMAP package is developed at the [Institute of Medical Systems Biology of Ulm University](https://sysbio.uni-ulm.de).
+For non-sensitive data you can use our [web application](https://fermat.informatik.uni-ulm.de/geneticumap) 
+to run a parameter optimization in a comfortable user interface without any installation.
 
 ---
 
