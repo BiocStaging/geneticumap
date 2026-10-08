@@ -260,13 +260,6 @@ run_optimization <- function(
     )
   )
 
-  #create temp directory
-  temp_data_dir <- Sys.getenv("TMPDIR", unset = tempdir())
-  temp_data_dir <- normalizePath(temp_data_dir)
-  if (!dir.exists(temp_data_dir)) dir.create(temp_data_dir, showWarnings = TRUE)
-  #check tempdir write permissions
-  check_write_permissions(temp_data_dir, paste0("Missing write permissions on temporary directory ", temp_data_dir, ". Check permissions or set another directory with the TMPDIR environment variable."))
-
   #create results directory
   if (!dir.exists(results_dir)) dir.create(results_dir, showWarnings = TRUE)
   check_write_permissions(results_dir, paste0("Missing write permissions on result directory ", results_dir))
@@ -274,15 +267,20 @@ run_optimization <- function(
   #disable vectorization under macOS
   Sys.setenv("VECLIB_MAXIMUM_THREADS" = 1)
 
-  #setup parallelization
+  #setup parallelization with socket workers
+  on.exit(expr = parallelStop()) #shut down all workers, when the main process stops
   parallelMap::parallelRegisterLevels(package = "ecr", levels = "evaluateFitness")
-  parallelMap::parallelStart(mode = "multicore", storagedir = temp_data_dir, cpus = num_processes)
-  message(paste0("Parallel setup with ", num_processes, " processes"))
+  parallelMap::parallelLibrary("clusterCrit", "ecr", "BBmisc", "Seurat", level = "ecr.evaluateFitness")
+  parallelMap::parallelStart(mode = "socket", cpus = num_processes)
+  message(paste0("Parallel setup with ", num_processes, " socket workers"))
 
   tryCatch(
     expr = {
       #read in raw (non-normalized) data (to initialize the Seurat object with)
       count_data <- load_count_data(data_dir, config$evolution$gene_column)
+
+      #exchange data with socket workers
+      parallelExport(objnames = c("get_umap_coords", "fitness_function", "sc_clustering_pipeline", "config", "count_data"))
 
       #execute evolution job
       evolution_result <- run_evolution(config, count_data) #forks and kills child processes
