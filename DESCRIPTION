@@ -17,6 +17,7 @@ Imports:
     ecr,
     clusterCrit,
     Seurat,
+    hdf5r,
     BBmisc,
     checkmate,
     SeuratObject,
