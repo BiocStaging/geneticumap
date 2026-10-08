@@ -179,6 +179,8 @@ The evolutionary algorithm uses `parallelMap`, at level `ecr.evaluateFitness`, w
 Therefore, each individual can be evaluated in a different parallelization unit.
 This is necessary because evaluating one individual means running a full Seurat pipeline, which is relatively expensive.
 
+geneticUMAP uses socket workers for parallelization to enable parallel computation also under Windows operating systems.
+
 The number of processes can be set with the `num_processes` function parameter of `run_optimization()`.
 
 ## Important Assumptions & Considerations

@@ -110,8 +110,7 @@ check_write_permissions <- function(directory, error_message) {
 #' Therefore, each individual can be evaluated in a different parallelization unit.
 #' This is recommended because evaluating one individual means running a full Seurat pipeline, which is computationally expensive.
 #' The number of processes can be set with the `num_processes` function parameter.
-#' Since parallelMap uses `fork` to clone processes, problems with parallelization may occur under macOS.
-#' You can then either disable parallelization by setting `num_processes = 1` or disable the safety check that prevents forking by setting the environment variable `OBJC_DISABLE_INITIALIZE_FORK_SAFETY` to `YES` for your R environment.
+#' You can then disable parallelization by setting `num_processes = 1`.
 #'
 #' @param data_dir the directory with a .h5 file or 10X Genomics dataset (expected files: barcodes.tsv, genes.tsv, matrix.mtx) to run the optimization with
 #' @param results_dir the directory to save the result files of the optimization, the directory is created if it does not exist
