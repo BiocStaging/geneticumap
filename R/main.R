@@ -1,8 +1,12 @@
 # data loading - format check
 load_count_data <- function(data_dir, gene_column) {
   h5_file <- list.files(data_dir, pattern = "\\.h5$", full.names = TRUE)[1]
-  if (!is.na(h5_file)) Seurat::Read10X_h5(filename = h5_file)
-  else Seurat::Read10X(data.dir = data_dir, gene.column = gene_column)
+  if (!is.na(h5_file)) counts <- Seurat::Read10X_h5(filename = h5_file)
+  else counts <- Seurat::Read10X(data.dir = data_dir, gene.column = gene_column)
+
+  # replace underscores with dashes in the feature names
+  rownames(counts) <- gsub("_", "-", rownames(counts))
+  return(counts)
 }
 
 # checks for a successful write access in the given directory, throws an error with the given error_message on failure
