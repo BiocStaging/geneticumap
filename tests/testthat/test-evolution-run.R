@@ -102,7 +102,7 @@ test_that("Parameter checks fail as expected", {
 })
 
 # set one optimized parameter to a fix value by setting _min = _max and expect the resulting parameter to stick with the fix value
-test_that("Evolution runs with fix parameter", {
+test_that("Evolution runs with fix parameter (with socket workers)", {
   results_dir <- prepare_test_directory()
 
   # run evolution with fixed dimensionality
@@ -110,7 +110,7 @@ test_that("Evolution runs with fix parameter", {
   default_dimensionality <- 10
   tryCatch({
     result_params <- run_optimization(data_dir = "../testdata", results_dir = results_dir, dimensionality_min = fix_dimensionality,
-                                      dimensionality_max = fix_dimensionality, mu = 2, lambda = 4, max_iterations = 2, num_processes = 1)
+                                      dimensionality_max = fix_dimensionality, mu = 2, lambda = 4, max_iterations = 2)
 
     # check optimized parameters are in expected ranges
     check_scale_factor_in_range(result_params$scale_factor)
