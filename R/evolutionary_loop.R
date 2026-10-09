@@ -48,7 +48,7 @@ evolution_loop <- function(fitness.fun, fitness.fun.name, minimize = NULL, n.obj
 
     ecr::updateLogger(log, population, fitness = fitness, n.evals = mu)
 
-    for (iter in 1:max.iter) { #FIXME Avoid 1:...; use seq_len() or seq_along()
+    for (iter in seq_len(max.iter)) {
         # Documentation says that generateOffspring passes down further arguments to the mutator, but it does not.
         # To access n.iter in the mutator, we therefore call it directly.
         offspring <- ecr::mutate(control, population[ecr::selectForMating(control, fitness, n.select = lambda)],

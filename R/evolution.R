@@ -90,9 +90,9 @@ setup_mutator <- function(mutation_type, adapt_mutation_rate, n_dim) {
 
                 mutation.rates <- mutation.rates * (stats::rlnorm(n.parm)^adapt_mutation_rate)
 
-                range.size <- upper[1:n.parm] - lower[1:n.parm] #FIXME Avoid 1:...; use seq_len() or seq_along()
+                range.size <- upper[seq_len(n.parm)] - lower[seq_len(n.parm)]
                 sdev <- range.size * mutation.rates
-                params <- mutate.gauss(params, p, sdev, lower[1:n.parm], upper[1:n.parm]) #FIXME Avoid 1:...; use seq_len() or seq_along()
+                params <- mutate.gauss(params, p, sdev, lower[seq_len(n.parm)], upper[seq_len(n.parm)])
 
                 return(c(params, mutation.rates))
             },
