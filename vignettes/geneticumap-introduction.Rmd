@@ -4,9 +4,9 @@ author: "Hanna Wagner, Lisa-Maria Winter, and Dominik Dreiheller"
 package: geneticumap
 output: rmarkdown::html_document
 vignette: >
-  %\VignetteIndexEntry{Getting Started with geneticumap}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+%\VignetteIndexEntry{Getting Started with geneticumap}
+%\VignetteEngine{knitr::rmarkdown}
+%\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
@@ -15,19 +15,19 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
 ## What geneticumap does
 
-Single-cell RNA sequencing (scRNA-seq) enables the characterization of cellular heterogeneity at single-cell resolution, 
-but its interpretation relies on computational workflows for dimensionality reduction and visualization. 
-These workflows require multiple parameter choices in preprocessing, clustering, and visualization steps. 
-Although general recommendations exist, suitable parameter selection remains dataset-specific, 
-leaving manual configuration susceptible to subjectivity and poor reproducibility when incompletely reported. 
-We address this gap with geneticUMAP, an objective, dataset-specific optimization framework for configuring scRNA-seq visualization. 
-`geneticUMAP` embeds the complete workflow in a genetic algorithm and optimizes its configuration using the Calinski-Harabasz index to evaluate 
-how well the intrinsic data structure is preserved in the final visualization. 
-We applied geneticUMAP to 18 publicly available scRNA-seq datasets that span different species, tissues, and acquisition protocols. 
+Single-cell RNA sequencing (scRNA-seq) enables the characterization of cellular heterogeneity at single-cell resolution,
+but its interpretation relies on computational workflows for dimensionality reduction and visualization.
+These workflows require multiple parameter choices in preprocessing, clustering, and visualization steps.
+Although general recommendations exist, suitable parameter selection remains dataset-specific,
+leaving manual configuration susceptible to subjectivity and poor reproducibility when incompletely reported.
+We address this gap with geneticUMAP, an objective, dataset-specific optimization framework for configuring scRNA-seq visualization.
+`geneticUMAP` embeds the complete workflow in a genetic algorithm and optimizes its configuration using the Calinski-Harabasz index to evaluate
+how well the intrinsic data structure is preserved in the final visualization.
+We applied geneticUMAP to 18 publicly available scRNA-seq datasets that span different species, tissues, and acquisition protocols.
 Across all datasets, optimization improved structure-preserving mappings.
-Additionally, we assess the robustness under parameter perturbations and the biological relevance of the resulting visualizations. 
-Optimized configurations generally produced more robust visualizations than default settings and improved agreement with author-provided cell-type annotations for most datasets. 
-By automatically identifying a suitable configuration, geneticUMAP eliminates the need for manual parameter tuning and enables more objective and robust scRNA-seq data visualizations. 
+Additionally, we assess the robustness under parameter perturbations and the biological relevance of the resulting visualizations.
+Optimized configurations generally produced more robust visualizations than default settings and improved agreement with author-provided cell-type annotations for most datasets.
+By automatically identifying a suitable configuration, geneticUMAP eliminates the need for manual parameter tuning and enables more objective and robust scRNA-seq data visualizations.
 
 Alongside this R package, geneticumap is available as a web application at \url{https://fermat.informatik.uni-ulm.de/geneticumap}.
 
@@ -37,7 +37,7 @@ Make sure R is installed on your system. Install the package from Bioconductor:
 
 ```{r install, eval=FALSE}
 if (!require("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
+    install.packages("BiocManager")
 
 BiocManager::install("geneticumap")
 ```
@@ -66,12 +66,12 @@ results_dir <- file.path(tempdir(), "geneticumap-vignette-results")
 
 ```{r run-optimization, message=FALSE, warning=FALSE, results='hide'}
 optimization_result <- run_optimization(
-  data_dir = data_dir,
-  results_dir = results_dir,
-  mu = 2,
-  lambda = 4,
-  max_iterations = 2,
-  num_processes = 1
+    data_dir = data_dir,
+    results_dir = results_dir,
+    mu = 2,
+    lambda = 4,
+    max_iterations = 2,
+    num_processes = 1
 )
 ```
 
@@ -99,7 +99,7 @@ two static plots gives a quick visual comparison between the default and
 selected settings; open the interactive HTML file for cell-level exploration.
 
 ## References
-*We retrieved this testdataset from the Seurat pipeline (https://satijalab.org/seurat/articles/pbmc3k_tutorial) and converted to h5. 
+*We retrieved this testdataset from the Seurat pipeline (https://satijalab.org/seurat/articles/pbmc3k_tutorial) and converted to h5.
 The original source of the dataset is:
 10x Genomics. 3k PBMCs from a Healthy Donor, Single Cell Gene Expression Dataset by Cell Ranger v1.1.0. 2016. url: https://www.10xgenomics.com/welcome?closeUrl=%2Fdatasets&lastTouchOfferName=3k%20PBMCs%20from%20a%20Healthy%20Donor&lastTouchOfferType=Dataset&product=atera&redirectUrl=%2Fdatasets%2F3-k-pbm-cs-from-a-healthy-donor-1-standard-1-1-0
 

@@ -6,7 +6,8 @@ get_umap_coords <- function(count_data, config, parm) {
 }
 
 fitness_function_factory <- function(function_selection, count_data, config) {
-    return(\(umap_coors) fitness_function(function_selection = function_selection, umap_coordinates = umap_coors, count_data = count_data, config = config))
+    return(\(umap_coors) fitness_function(function_selection = function_selection,
+                                          umap_coordinates = umap_coors, count_data = count_data, config = config))
 }
 
 #fitness function definition
@@ -89,9 +90,9 @@ setup_mutator <- function(mutation_type, adapt_mutation_rate, n_dim) {
 
                 mutation.rates <- mutation.rates * (stats::rlnorm(n.parm)^adapt_mutation_rate)
 
-                range.size <- upper[1:n.parm] - lower[1:n.parm]
+                range.size <- upper[1:n.parm] - lower[1:n.parm] #FIXME Avoid 1:...; use seq_len() or seq_along()
                 sdev <- range.size * mutation.rates
-                params <- mutate.gauss(params, p, sdev, lower[1:n.parm], upper[1:n.parm])
+                params <- mutate.gauss(params, p, sdev, lower[1:n.parm], upper[1:n.parm]) #FIXME Avoid 1:...; use seq_len() or seq_along()
 
                 return(c(params, mutation.rates))
             },
@@ -101,7 +102,8 @@ setup_mutator <- function(mutation_type, adapt_mutation_rate, n_dim) {
 }
 
 run_evolution <- function(config, count_data) {
-    n_dim <- if (config$evolution$mutation_type == "adaptive") 2L * length(config$evolution$optimization_params) else length(config$evolution$optimization_params)
+    n_dim <- if (config$evolution$mutation_type == "adaptive") 2L * length(config$evolution$optimization_params)
+    else length(config$evolution$optimization_params)
 
     if (config$evolution$init_default) {
         default_params <- unlist(config$sc_clustering$default, use.names = FALSE)
@@ -115,8 +117,8 @@ run_evolution <- function(config, count_data) {
         initial_solutions <- NULL
     }
 
-    lower <- unlist(sapply(config$evolution$optimization_params, \(parm) config$sc_clustering$lower[[parm]]), use.names = FALSE)
-    upper <- unlist(sapply(config$evolution$optimization_params, \(parm) config$sc_clustering$upper[[parm]]), use.names = FALSE)
+    lower <- unlist(sapply(config$evolution$optimization_params, \(parm) config$sc_clustering$lower[[parm]]), use.names = FALSE) #FIXME Avoid sapply(); use vapply()
+    upper <- unlist(sapply(config$evolution$optimization_params, \(parm) config$sc_clustering$upper[[parm]]), use.names = FALSE) #FIXME Avoid sapply(); use vapply()
     #adaptive bounds for mutation rates if using adaptive mutation
     if (config$evolution$mutation_type == "adaptive") {
         lower <- c(lower, rep.int(0.00005, length(config$evolution$optimization_params)))
@@ -125,7 +127,8 @@ run_evolution <- function(config, count_data) {
 
     #run single-objective evolutionary algorithm
     result <- evolution_loop(
-        fitness.fun = fitness_function_factory(function_selection = config$evolution$fitness_func, config = config, count_data = count_data),
+        fitness.fun = fitness_function_factory(function_selection = config$evolution$fitness_func,
+                                               config = config, count_data = count_data),
         fitness.fun.name = config$evolution$fitness_func,
         minimize = fitness_function_is_minimize(config$evolution$fitness_func),
         n.objectives = 1L,
@@ -140,7 +143,8 @@ run_evolution <- function(config, count_data) {
         survival.strategy = config$evolution$survival_strategy,
         initial.solutions = initial_solutions,
         max.iter = config$evolution$max_iterations,
-        mutator = setup_mutator(mutation_type = config$evolution$mutation_type, adapt_mutation_rate = config$evolution$adapt_mutation_rate, n_dim = n_dim),
+        mutator = setup_mutator(mutation_type = config$evolution$mutation_type,
+                                adapt_mutation_rate = config$evolution$adapt_mutation_rate, n_dim = n_dim),
         parent.selector = ecr::selTournament, #parent selector for single-objective task
         survival.selector = ecr::selGreedy, #survival selector for single-objective task
         log.stats = config$evolution$log$stats,
@@ -155,7 +159,8 @@ write_result <- function(count_data, res, results_dir, fitness_fun, config) {
     best.params <- as.list(res$best.x[[1]][seq_along(config$evolution$optimization_params)])
     names(best.params) <- config$evolution$optimization_params
     digits <- c(scale_factor = 2L, nfeatures = 0L, dimensionality = 0L, resolution = 2L, umap_neighbors = 0L, umap_min_dist = 2L)
-    best.params[names(digits)] <- Map(\(x, d) if (d == 0L) as.integer(round(x)) else round(as.numeric(x), d), best.params[names(digits)], digits)
+    best.params[names(digits)] <- Map(\(x, d) if (d == 0L) as.integer(round(x))
+    else round(as.numeric(x), d), best.params[names(digits)], digits)
     # compute umap and find markers for best parameters
     best.result <- sc_clustering_pipeline(count_data = count_data, config = config, params = best.params, return_markers = TRUE)
     res$best.markers <- best.result$markers
@@ -168,17 +173,21 @@ write_result <- function(count_data, res, results_dir, fitness_fun, config) {
     jsonlite::write_json(best.params, seurat_params_file, pretty = TRUE, auto_unbox = TRUE)
 
     umap_coordinates_file <- file.path(results_dir, config$results$file_umap_coordinates)
-    utils::write.table(data.frame(cell_id = rownames(res$best.umap), res$best.umap, row.names = NULL, check.names = FALSE), umap_coordinates_file, sep = "\t", quote = FALSE, row.names = FALSE)
+    utils::write.table(data.frame(cell_id = rownames(res$best.umap), res$best.umap, row.names = NULL,
+                                  check.names = FALSE), umap_coordinates_file, sep = "\t", quote = FALSE, row.names = FALSE)
 
     cluster_identities_file <- file.path(results_dir, config$results$file_cluster_identities)
-    utils::write.table(data.frame(cell_id = names(res$best.clusters), cluster = as.character(res$best.clusters), row.names = NULL, check.names = FALSE), cluster_identities_file, sep = "\t", quote = FALSE, row.names = FALSE)
+    utils::write.table(data.frame(cell_id = names(res$best.clusters), cluster = as.character(res$best.clusters),
+                                  row.names = NULL, check.names = FALSE), cluster_identities_file, sep = "\t",
+                       quote = FALSE, row.names = FALSE)
 
     # save scatter_fitness_plot and interactive and static umap plot of best candidate + umap with default seurat params for reference
     scatter_fitness_file <- file.path(results_dir, config$results$file_scatter_fitness)
     scatter_plot_from_res(fitness_fun = fitness_fun, config = config, output_file = scatter_fitness_file, res = res)
 
     umap_plot_file <- file.path(results_dir, config$results$file_umap_plot)
-    plot_umap(count_data = count_data, config = config, ind = unlist(config$sc_clustering$default, use.names = FALSE), filename = umap_plot_file)
+    plot_umap(count_data = count_data, config = config, ind = unlist(config$sc_clustering$default, use.names = FALSE),
+              filename = umap_plot_file)
 
     umap_plot_html <- file.path(results_dir, config$results$file_umap_plot_interactive)
     umap_plot_static <- file.path(results_dir, config$results$file_umap_plot_static)

@@ -34,9 +34,11 @@ check_write_permissions <- function(directory, error_message) {
 }
 
 # checks whether all parameters have valid data types and values
-check_parameter_validity <- function(gene_column, max_iterations, mu, lambda, survival_strategy, probability_recombination, probability_mutation, adapt_mutation_rate,
-                                     scale_factor_min, nfeatures_min, dimensionality_min, resolution_min, umap_neighbors_min, umap_min_dist_min,
-                                     scale_factor_max, nfeatures_max, dimensionality_max, resolution_max, umap_neighbors_max, umap_min_dist_max, num_processes) {
+check_parameter_validity <- function(gene_column, max_iterations, mu, lambda, survival_strategy, probability_recombination,
+                                     probability_mutation, adapt_mutation_rate, scale_factor_min, nfeatures_min,
+                                     dimensionality_min, resolution_min, umap_neighbors_min, umap_min_dist_min,
+                                     scale_factor_max, nfeatures_max, dimensionality_max, resolution_max, umap_neighbors_max,
+                                     umap_min_dist_max, num_processes) {
     checkmate::assert_int(gene_column, lower = 1)
     checkmate::assert_int(max_iterations, lower = 1)
     checkmate::assert_int(mu, lower = 1)
@@ -80,9 +82,11 @@ create_sc_clustering_config <- function(scale_factor, nfeatures, dimensionality,
 }
 
 # creates a configuration as named vector with the given values
-create_config <- function(results_dir, gene_column, max_iterations, mu, lambda, survival_strategy, probability_recombination, probability_mutation, adapt_mutation_rate,
-                          scale_factor_min, nfeatures_min, dimensionality_min, resolution_min, umap_neighbors_min, umap_min_dist_min,
-                          scale_factor_max, nfeatures_max, dimensionality_max, resolution_max, umap_neighbors_max, umap_min_dist_max) {
+create_config <- function(results_dir, gene_column, max_iterations, mu, lambda, survival_strategy,
+                          probability_recombination, probability_mutation, adapt_mutation_rate, scale_factor_min,
+                          nfeatures_min, dimensionality_min, resolution_min, umap_neighbors_min, umap_min_dist_min,
+                          scale_factor_max, nfeatures_max, dimensionality_max, resolution_max, umap_neighbors_max,
+                          umap_min_dist_max) {
     return(list(
         evolution = list(
             log = list(
@@ -104,8 +108,10 @@ create_config <- function(results_dir, gene_column, max_iterations, mu, lambda, 
         ),
         sc_clustering = list(
             default = create_sc_clustering_config(10000, 2000, 10, 0.5, 30, 0.3),
-            lower = create_sc_clustering_config(scale_factor_min, nfeatures_min, dimensionality_min, resolution_min, umap_neighbors_min, umap_min_dist_min),
-            upper = create_sc_clustering_config(scale_factor_max, nfeatures_max, dimensionality_max, resolution_max, umap_neighbors_max, umap_min_dist_max
+            lower = create_sc_clustering_config(scale_factor_min, nfeatures_min, dimensionality_min,
+                                                resolution_min, umap_neighbors_min, umap_min_dist_min),
+            upper = create_sc_clustering_config(scale_factor_max, nfeatures_max, dimensionality_max,
+                                                resolution_max, umap_neighbors_max, umap_min_dist_max
             ),
             quality_thresholds = list(
                 nFeature_RNA_min = 200,
@@ -246,43 +252,24 @@ create_config <- function(results_dir, gene_column, max_iterations, mu, lambda, 
 #' run_optimization(data_dir = "/Users/myuser/Documents/mydata")
 #' run_optimization(data_dir = "../mydata", results_dir = ../mydata/optimization-results, mu = 2, lambda = 4, max_iterations = 8)
 #' run_optimization(data_dir = "../mydata", dimensionality_min = 6, dimensionality_max = 6, num_processes = 1)
-run_optimization <- function(
-    data_dir,
-    results_dir = file.path(data_dir, "results"),
-
-    gene_column = 1,
-    max_iterations = 10,
-    mu = 5,
-    lambda = 10,
-    survival_strategy = "plus",
-    probability_recombination = 0,
-    probability_mutation = 1,
-    adapt_mutation_rate = 0.7,
-
-    scale_factor_min = 1000,
-    nfeatures_min = 500,
-    dimensionality_min = 5,
-    resolution_min = 0.1,
-    umap_neighbors_min = 5,
-    umap_min_dist_min = 0.01,
-    scale_factor_max = 50000,
-    nfeatures_max = 5000,
-    dimensionality_max = 50,
-    resolution_max = 2,
-    umap_neighbors_max = 50,
-    umap_min_dist_max = 0.7,
-
-    num_processes = min(lambda, parallelly::availableCores())
+run_optimization <- function(data_dir, results_dir = file.path(data_dir, "results"), gene_column = 1, max_iterations = 10,
+                             mu = 5, lambda = 10, survival_strategy = "plus", probability_recombination = 0, probability_mutation = 1,
+                             adapt_mutation_rate = 0.7, scale_factor_min = 1000, nfeatures_min = 500, dimensionality_min = 5,
+                             resolution_min = 0.1, umap_neighbors_min = 5, umap_min_dist_min = 0.01, scale_factor_max = 50000,
+                             nfeatures_max = 5000, dimensionality_max = 50, resolution_max = 2, umap_neighbors_max = 50,
+                             umap_min_dist_max = 0.7, num_processes = min(lambda, parallelly::availableCores())
 ) {
-    check_parameter_validity(gene_column, max_iterations, mu, lambda, survival_strategy, probability_recombination, probability_mutation, adapt_mutation_rate,
-                             scale_factor_min, nfeatures_min, dimensionality_min, resolution_min, umap_neighbors_min, umap_min_dist_min,
-                             scale_factor_max, nfeatures_max, dimensionality_max, resolution_max, umap_neighbors_max, umap_min_dist_max, num_processes)
+    check_parameter_validity(gene_column, max_iterations, mu, lambda, survival_strategy, probability_recombination,
+                             probability_mutation, adapt_mutation_rate, scale_factor_min, nfeatures_min, dimensionality_min,
+                             resolution_min, umap_neighbors_min, umap_min_dist_min, scale_factor_max, nfeatures_max,
+                             dimensionality_max, resolution_max, umap_neighbors_max, umap_min_dist_max, num_processes)
 
     message("Initializing optimization...")
 
-    config <- create_config(results_dir, gene_column, max_iterations, mu, lambda, survival_strategy, probability_recombination, probability_mutation, adapt_mutation_rate,
-                            scale_factor_min, nfeatures_min, dimensionality_min, resolution_min, umap_neighbors_min, umap_min_dist_min,
-                            scale_factor_max, nfeatures_max, dimensionality_max, resolution_max, umap_neighbors_max, umap_min_dist_max)
+    config <- create_config(results_dir, gene_column, max_iterations, mu, lambda, survival_strategy, probability_recombination,
+                            probability_mutation, adapt_mutation_rate, scale_factor_min, nfeatures_min, dimensionality_min,
+                            resolution_min, umap_neighbors_min, umap_min_dist_min, scale_factor_max, nfeatures_max,
+                            dimensionality_max, resolution_max, umap_neighbors_max, umap_min_dist_max)
 
     #create results directory
     if (!dir.exists(results_dir)) dir.create(results_dir, showWarnings = TRUE)
@@ -305,9 +292,9 @@ run_optimization <- function(
         evolution_result <- run_evolution(config, count_data) #forks and kills child processes
 
         #write results
-        message("Writing result files in ", results_dir, "...")
-        result_params <- suppressMessages(write_result(count_data = count_data, res = evolution_result, results_dir = results_dir, config = config,
-                                                       fitness_fun = fitness_function_factory(function_selection = config$evolution$fitness_func, count_data = count_data, config = config)))
+        result_params <- write_result(count_data = count_data, res = evolution_result, results_dir = results_dir, config = config,
+                                      fitness_fun = fitness_function_factory(function_selection = config$evolution$fitness_func,
+                                                                             count_data = count_data, config = config))
 
         message("Optimization finished successfully")
 

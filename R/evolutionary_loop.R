@@ -24,24 +24,11 @@ create_ecr_control <- function(fitness.fun, minimize, n.objectives, representati
     return(control)
 }
 
-evolution_loop <- function(
-    fitness.fun,
-    fitness.fun.name,
-    minimize = NULL,
-    n.objectives = 1L,
-    n.dim = NULL, lower = NULL, upper = NULL,
-    representation, mu, lambda,
-    p.recomb = 0.7, p.mut = 0.3,
-    survival.strategy = "plus", n.elite = 0L,
-    log.stats = NULL,
-    log.pop = FALSE,
-    monitor = NULL,
-    initial.solutions = NULL,
-    parent.selector = NULL,
-    survival.selector = NULL,
-    mutator = NULL,
-    max.iter = 100L,
-    ...) {
+evolution_loop <- function(fitness.fun, fitness.fun.name, minimize = NULL, n.objectives = 1L, n.dim = NULL,
+                           lower = NULL, upper = NULL, representation, mu, lambda, p.recomb = 0.7, p.mut = 0.3,
+                           survival.strategy = "plus", n.elite = 0L, log.stats = NULL, log.pop = FALSE,
+                           monitor = NULL, initial.solutions = NULL, parent.selector = NULL, survival.selector = NULL,
+                           mutator = NULL, max.iter = 100L, ...) {
     log_stats_list <- create_logging_setup(log.stats, fitness.fun.name, minimize)
     control <- create_ecr_control(fitness.fun, minimize, n.objectives, representation, mutator, parent.selector, survival.selector)
     log <- ecr::initLogger(control, log.stats = log_stats_list, log.pop = log.pop, init.size = 1000L)
@@ -61,10 +48,11 @@ evolution_loop <- function(
 
     ecr::updateLogger(log, population, fitness = fitness, n.evals = mu)
 
-    for (iter in 1:max.iter) {
+    for (iter in 1:max.iter) { #FIXME Avoid 1:...; use seq_len() or seq_along()
         # Documentation says that generateOffspring passes down further arguments to the mutator, but it does not.
         # To access n.iter in the mutator, we therefore call it directly.
-        offspring <- ecr::mutate(control, population[ecr::selectForMating(control, fitness, n.select = lambda)], p.mut = p.mut, n.iter = iter, lower = lower, upper = upper)
+        offspring <- ecr::mutate(control, population[ecr::selectForMating(control, fitness, n.select = lambda)],
+                                 p.mut = p.mut, n.iter = iter, lower = lower, upper = upper)
         fitness.offspring <- ecr::evaluateFitness(control, offspring, ...) #this runs in parallel batches per parallelization unit
         for (i in seq_along(offspring)) {
             attr(offspring[[i]], "fitness") <- fitness.offspring[, i]
