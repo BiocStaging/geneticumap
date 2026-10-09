@@ -6,7 +6,7 @@ Authors@R: c(
     person("Lisa-Maria", "Winter", email = "lisa-maria-1.winter@uni-ulm.de", role = c("aut")),
     person("Hanna", "Wagner", email = "hanna.wagner@uni-ulm.de", role = c("aut")),
     person("Dominik", "Dreiheller", role = c("aut")),
-    person("Hans A.", "Kestler", email = "hans.kestler@uni-ulm.de", role = c("cre")))
+    person("Hans A.", "Kestler", email = "hans.kestler@uni-ulm.de", role = c("cre"), comment=c(ORCID="0000-0002-4759-5254")))
 Description: The geneticumap package searches for single-cell clustering parameters by treating the Seurat preprocessing and clustering workflow
     as an optimization problem. The UMAP-based clustering pipeline parameters for single-cell RNA-seq data (like resolution, number of PCs, or neighbor counts)
     evolve using an evolutionary algorithm to systematically search for an optimal set of parameters for a given dataset.
