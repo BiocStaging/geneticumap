@@ -72,23 +72,25 @@ test_that("Evolution runs successfully (single-threaded)", {
     results_dir <- prepare_test_directory()
 
     # run evolution
-    tryCatch({
-        result_params <- run_optimization(data_dir = "../testdata", results_dir = results_dir, mu = 2, lambda = 4, max_iterations = 2, num_processes = 1)
+    tryCatch(
+        {
+            result_params <- run_optimization(data_dir = "../testdata", results_dir = results_dir, mu = 2, lambda = 4, max_iterations = 2, num_processes = 1)
 
-        # check optimized parameters are in default ranges
-        check_scale_factor_in_range(result_params$scale_factor)
-        check_nfeatures_in_range(result_params$nfeatures)
-        check_dimensionality_in_range(result_params$dimensionality)
-        check_resolution_in_range(result_params$resolution)
-        check_umap_neighbors_in_range(result_params$umap_neighbors)
-        check_umap_min_dist_in_range(result_params$umap_min_dist)
+            # check optimized parameters are in default ranges
+            check_scale_factor_in_range(result_params$scale_factor)
+            check_nfeatures_in_range(result_params$nfeatures)
+            check_dimensionality_in_range(result_params$dimensionality)
+            check_resolution_in_range(result_params$resolution)
+            check_umap_neighbors_in_range(result_params$umap_neighbors)
+            check_umap_min_dist_in_range(result_params$umap_min_dist)
 
-        # check all expected result files are present
-        check_result_files(results_dir)
-
-    }, error = function(info) {
-        fail(message = paste0("Test failed with error: ", info))
-    })
+            # check all expected result files are present
+            check_result_files(results_dir)
+        },
+        error = function(info) {
+            fail(message = paste0("Test failed with error: ", info))
+        }
+    )
 })
 
 # set invalid parameters and expect an error message
@@ -112,22 +114,26 @@ test_that("Evolution runs with fix parameter (with socket workers)", {
     # run evolution with fixed dimensionality
     fix_dimensionality <- 6
     default_dimensionality <- 10
-    tryCatch({
-        result_params <- run_optimization(data_dir = "../testdata", results_dir = results_dir, dimensionality_min = fix_dimensionality,
-                                          dimensionality_max = fix_dimensionality, mu = 2, lambda = 4, max_iterations = 2)
+    tryCatch(
+        {
+            result_params <- run_optimization(
+                data_dir = "../testdata", results_dir = results_dir, dimensionality_min = fix_dimensionality,
+                dimensionality_max = fix_dimensionality, mu = 2, lambda = 4, max_iterations = 2
+            )
 
-        # check optimized parameters are in expected ranges
-        check_scale_factor_in_range(result_params$scale_factor)
-        check_nfeatures_in_range(result_params$nfeatures)
-        expect_true(result_params$dimensionality == fix_dimensionality || result_params$dimensionality == default_dimensionality)
-        check_resolution_in_range(result_params$resolution)
-        check_umap_neighbors_in_range(result_params$umap_neighbors)
-        check_umap_min_dist_in_range(result_params$umap_min_dist)
+            # check optimized parameters are in expected ranges
+            check_scale_factor_in_range(result_params$scale_factor)
+            check_nfeatures_in_range(result_params$nfeatures)
+            expect_true(result_params$dimensionality == fix_dimensionality || result_params$dimensionality == default_dimensionality)
+            check_resolution_in_range(result_params$resolution)
+            check_umap_neighbors_in_range(result_params$umap_neighbors)
+            check_umap_min_dist_in_range(result_params$umap_min_dist)
 
-        # check all expected result files are present
-        check_result_files(results_dir)
-
-    }, error = function(info) {
-        fail(message = paste0("Test failed with error: ", info))
-    })
+            # check all expected result files are present
+            check_result_files(results_dir)
+        },
+        error = function(info) {
+            fail(message = paste0("Test failed with error: ", info))
+        }
+    )
 })

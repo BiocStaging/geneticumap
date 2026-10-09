@@ -1,4 +1,4 @@
-#create single-objective logging setup
+# create single-objective logging setup
 create_logging_setup <- function(log.stats, fitness.fun.name, minimize) {
     log_stats_list <- list(fitness = list())
     for (stat in log.stats) {
@@ -42,18 +42,14 @@ evolution_loop <- function(fitness.fun, fitness.fun.name, minimize = NULL, n.obj
     }
     fitness <- ecr::evaluateFitness(control, population, ...)
 
-    for (i in seq_along(population)) {
-        attr(population[[i]], "fitness") <- fitness[, i]
-    }
+    for (i in seq_along(population)) { attr(population[[i]], "fitness") <- fitness[, i] }
 
     ecr::updateLogger(log, population, fitness = fitness, n.evals = mu)
 
     for (iter in seq_len(max.iter)) {
-        # Documentation says that generateOffspring passes down further arguments to the mutator, but it does not.
-        # To access n.iter in the mutator, we therefore call it directly.
         offspring <- ecr::mutate(control, population[ecr::selectForMating(control, fitness, n.select = lambda)],
-                                 p.mut = p.mut, n.iter = iter, lower = lower, upper = upper)
-        fitness.offspring <- ecr::evaluateFitness(control, offspring, ...) #this runs in parallel batches per parallelization unit
+            p.mut = p.mut, n.iter = iter, lower = lower, upper = upper)
+        fitness.offspring <- ecr::evaluateFitness(control, offspring, ...) # this runs in parallel batches per parallelization unit
         for (i in seq_along(offspring)) {
             attr(offspring[[i]], "fitness") <- fitness.offspring[, i]
         }
@@ -64,14 +60,12 @@ evolution_loop <- function(fitness.fun, fitness.fun.name, minimize = NULL, n.obj
             ecr::replaceMuCommaLambda(control, population, offspring, fitness, fitness.offspring, n.elite = n.elite)
         }
 
-        #explicitly remove references to old generations
-        rm(population, fitness, offspring, fitness.offspring)
+        rm(population, fitness, offspring, fitness.offspring) # explicitly remove references to old generations
 
         population <- sel$population
         fitness <- sel$fitness
 
-        #remove duplicate pointers
-        rm(sel)
+        rm(sel) # remove duplicate pointers
 
         ecr::updateLogger(log, population, fitness, n.evals = lambda)
         if (is.function(monitor)) monitor()

@@ -1,9 +1,10 @@
 options(Seurat.warn.umap.uwot = FALSE)
 
 sc_clustering_pipeline <- function(count_data, config, params, return_markers = FALSE) {
-    #check data is named list or matrix
+    # check data is named list or matrix
     checkmate::assert(checkmate::check_list(count_data, names = "unique"),
-                      checkmate::check_class(count_data, "dgCMatrix"), combine = "or", .var.name = "count_data")
+        checkmate::check_class(count_data, "dgCMatrix"),
+        combine = "or", .var.name = "count_data")
 
     seurat_obj <- Seurat::CreateSeuratObject(counts = count_data, project = "geneticumap", min.cells = 3, min.features = 200)
 
@@ -11,18 +12,9 @@ sc_clustering_pipeline <- function(count_data, config, params, return_markers = 
     seurat_obj[["percent_mt"]] <- Seurat::PercentageFeatureSet(seurat_obj, pattern = "^MT-")
 
     seurat_meta <- seurat_obj[[]]
-    keep_cells <- seurat_meta$nFeature_RNA > config$
-        sc_clustering$
-        quality_thresholds$
-        nFeature_RNA_min &
-        seurat_meta$nFeature_RNA < config$
-            sc_clustering$
-            quality_thresholds$
-            nFeature_RNA_max &
-        seurat_meta$percent_mt < config$
-            sc_clustering$
-            quality_thresholds$
-            percent_mt
+    keep_cells <- seurat_meta$nFeature_RNA > config$sc_clustering$quality_thresholds$nFeature_RNA_min &
+        seurat_meta$nFeature_RNA < config$sc_clustering$quality_thresholds$nFeature_RNA_max &
+        seurat_meta$percent_mt < config$sc_clustering$quality_thresholds$percent_mt
     seurat_obj <- seurat_obj[, keep_cells]
 
     # round integer-valued parameters (optimizer works with continuous floats)
@@ -32,11 +24,11 @@ sc_clustering_pipeline <- function(count_data, config, params, return_markers = 
 
     # normalization
     seurat_obj <- Seurat::NormalizeData(seurat_obj, normalization.method = "LogNormalize",
-                                        scale.factor = params$scale_factor, verbose = FALSE)
+        scale.factor = params$scale_factor, verbose = FALSE)
 
     # identification of highly variable features
     seurat_obj <- Seurat::FindVariableFeatures(seurat_obj, selection.method = "vst",
-                                               nfeatures = params$nfeatures, verbose = FALSE)
+        nfeatures = params$nfeatures, verbose = FALSE)
 
     # linear transformation (scaling)
     all.genes <- rownames(seurat_obj)
@@ -49,15 +41,12 @@ sc_clustering_pipeline <- function(count_data, config, params, return_markers = 
     seurat_obj <- Seurat::FindNeighbors(seurat_obj, dims = seq_len(params$dimensionality), verbose = FALSE)
     seurat_obj <- Seurat::FindClusters(seurat_obj, resolution = params$resolution, verbose = FALSE)
 
-    # run UMAP
     seurat_obj <- Seurat::RunUMAP(seurat_obj, dims = seq_len(params$dimensionality),
-                                  n.neighbors = params$umap_neighbors, min.dist = params$umap_min_dist, verbose = FALSE)
+        n.neighbors = params$umap_neighbors, min.dist = params$umap_min_dist, verbose = FALSE)
 
-    if (return_markers) {
-        # Compute markers only if requested, not during fitness evaluation.
+    if (return_markers) { # Compute markers only if requested, not during fitness evaluation
         data_obj.markers <- Seurat::FindAllMarkers(seurat_obj, only.pos = TRUE)
         return(list(data_obj = seurat_obj, markers = data_obj.markers))
     }
-
     return(seurat_obj)
 }

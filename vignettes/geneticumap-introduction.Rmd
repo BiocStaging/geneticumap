@@ -36,8 +36,9 @@ Alongside this R package, geneticumap is available as a web application at \url{
 Make sure R is installed on your system. Install the package from Bioconductor:
 
 ```{r install, eval=FALSE}
-if (!require("BiocManager", quietly = TRUE))
+if (!require("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager")
+}
 
 BiocManager::install("geneticumap")
 ```
