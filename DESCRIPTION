@@ -13,6 +13,8 @@ Description: The geneticumap package searches for single-cell clustering paramet
     The most appropriate configuration is objectively identified by the Calinski-Harabasz index.
     The package is developed at the [Institute of Medical Systems Biology of Ulm University](https://sysbio.uni-ulm.de).
 License: MIT + file LICENSE
+Depends:
+    R (>= 4.5.0)
 Imports:
     ecr,
     clusterCrit,
