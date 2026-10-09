@@ -4,9 +4,9 @@ author: "Hanna Wagner, Lisa-Maria Winter, and Dominik Dreiheller"
 package: geneticumap
 output: rmarkdown::html_document
 vignette: >
-%\VignetteIndexEntry{Getting Started with geneticumap}
-%\VignetteEngine{knitr::rmarkdown}
-%\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{Getting Started with geneticumap}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
