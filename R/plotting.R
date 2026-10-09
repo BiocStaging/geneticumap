@@ -1,5 +1,3 @@
-library(ggplot2, quietly = TRUE)
-
 plot_umap <- function(count_data, config, ind, filename, ...) {
     ind <- as.list(ind)
     names(ind) <- config$evolution$optimization_params
