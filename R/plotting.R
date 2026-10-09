@@ -24,8 +24,9 @@ plot_interactive_umap_from_res <- function(output_file_html, output_file_static,
                     \(df) utils::head(df$gene[order(df$avg_log2FC, decreasing = TRUE)], 20))
     hover <- stats::setNames(vapply(names(top20), \(cl) {
         genes <- top20[[cl]]
-        gene_text <- paste(sapply(seq(1, length(genes), 5), \(i) paste(genes[i:min(i + 4, length(genes))], collapse = ", ")),
-                           collapse = "<br>") #FIXME Avoid sapply(); use vapply()
+        gene_text <- paste(vapply(seq(1, length(genes), 5),
+                                  \(i) paste(genes[i:min(i + 4, length(genes))], collapse = ", "),
+                                  FUN.VALUE = character(1)), collapse = "<br>")
         paste0("Cluster: ", cl, "<br>Top 20 markers:<br>", gene_text)
     }, character(1)), names(top20))
 

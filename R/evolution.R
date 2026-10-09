@@ -117,8 +117,10 @@ run_evolution <- function(config, count_data) {
         initial_solutions <- NULL
     }
 
-    lower <- unlist(sapply(config$evolution$optimization_params, \(parm) config$sc_clustering$lower[[parm]]), use.names = FALSE) #FIXME Avoid sapply(); use vapply()
-    upper <- unlist(sapply(config$evolution$optimization_params, \(parm) config$sc_clustering$upper[[parm]]), use.names = FALSE) #FIXME Avoid sapply(); use vapply()
+    lower <- vapply(config$evolution$optimization_params,
+                    \(parm) config$sc_clustering$lower[[parm]], FUN.VALUE = numeric(1), USE.NAMES = FALSE)
+    upper <- vapply(config$evolution$optimization_params,
+                    \(parm) config$sc_clustering$upper[[parm]], FUN.VALUE = numeric(1), USE.NAMES = FALSE)
     #adaptive bounds for mutation rates if using adaptive mutation
     if (config$evolution$mutation_type == "adaptive") {
         lower <- c(lower, rep.int(0.00005, length(config$evolution$optimization_params)))
