@@ -88,7 +88,7 @@ The function parameters let you configure:
 - the folder paths for data and results
 - the parameter bounds
 - the iteration budget and population sizes
-- the survival strategy and recombination and mutation probabilities
+- the survival strategy and mutation probability
 - the rate of mutation-rate adaptation
 - the number of parallel processes
 
