@@ -2,7 +2,8 @@
 % Please edit documentation in R/main.R
 \name{run_optimization}
 \alias{run_optimization}
-\title{Optimizes UMAP-based clustering pipeline parameters for single-cell RNA-seq data using an evolutionary algorithm}
+\title{Optimizes UMAP-based clustering pipeline parameters for single-cell
+RNA-seq data using an evolutionary algorithm.}
 \usage{
 run_optimization(
   data_dir,
@@ -12,7 +13,6 @@ run_optimization(
   mu = 5,
   lambda = 10,
   survival_strategy = "plus",
-  probability_recombination = 0,
   probability_mutation = 1,
   adapt_mutation_rate = 0.7,
   scale_factor_min = 1000,
@@ -31,61 +31,86 @@ run_optimization(
 )
 }
 \arguments{
-\item{data_dir}{the directory with a .h5 file or 10X Genomics dataset (expected files: barcodes.tsv, genes.tsv, matrix.mtx) to run the optimization with}
+\item{data_dir}{the directory with a .h5 file or 10X Genomics dataset
+(expected files: barcodes.tsv, genes.tsv, matrix.mtx) to run the
+optimization with}
 
-\item{results_dir}{the directory to save the result files of the optimization, the directory is created if it does not exist}
+\item{results_dir}{the directory to save the result files of the
+optimization, the directory is created if it does not exist}
 
-\item{gene_column}{the position of the gene names in the genes.tsv file on a 10x Genomics dataset}
+\item{gene_column}{the position of the gene names in the genes.tsv file on
+a 10x Genomics dataset}
 
 \item{max_iterations}{the maximum number of iterations of the evolution}
 
-\item{mu}{(greek letter \eqn{\mu}) the number of individuals in the population (commonly referred to as the parent population size)}
+\item{mu}{(greek letter \eqn{\mu}) the number of individuals in the
+population (commonly referred to as the parent population size)}
 
 \item{lambda}{the number of individuals generated in each generation}
 
-\item{survival_strategy}{the survivor-selection strategy: "plus" (mu + lambda) selects the next population of \code{mu} individuals from the parents and offspring combined, so parents may survive; "comma" (mu, lambda) selects the next population only from the \code{lambda} offspring, so parents do not survive directly. For "comma", \code{lambda} must be at least \code{mu}.}
+\item{survival_strategy}{the survivor-selection strategy: "plus" (mu +
+lambda) selects the next population of \code{mu} individuals from the parents and
+offspring combined, so parents may survive; "comma" (mu, lambda) selects the
+next population only from the \code{lambda} offspring, so parents do not survive
+directly. For "comma", \code{lambda} must be at least \code{mu}.}
 
-\item{probability_recombination}{the probability of two parents to perform a crossover}
-
-\item{probability_mutation}{the probability that a mutation operator will be applied to a child - refers only to the application of the mutation operator, not to the probability of mutating individual genes of the respective child}
+\item{probability_mutation}{the probability that a mutation operator will
+be applied to a child - refers only to the application of the mutation
+operator, not to the probability of mutating individual genes of the
+respective child}
 
 \item{adapt_mutation_rate}{controls how fast mutation rates can evolve}
 
-\item{scale_factor_min}{the lower bound for the scale_factor parameter in in the optimization}
+\item{scale_factor_min}{the lower bound for the scale_factor parameter in
+the optimization}
 
-\item{nfeatures_min}{the lower bound for the nfeatures parameter in in the optimization}
+\item{nfeatures_min}{the lower bound for the nfeatures parameter in the
+optimization}
 
-\item{dimensionality_min}{the lower bound for the dimensionality parameter in in the optimization}
+\item{dimensionality_min}{the lower bound for the dimensionality parameter
+in the optimization}
 
-\item{resolution_min}{the lower bound for the resolution parameter in in the optimization}
+\item{resolution_min}{the lower bound for the resolution parameter in
+the optimization}
 
-\item{umap_neighbors_min}{the lower bound for the umap_neighbors parameter in in the optimization}
+\item{umap_neighbors_min}{the lower bound for the umap_neighbors parameter
+in the optimization}
 
-\item{umap_min_dist_min}{the lower bound for the umap_min_dist parameter in in the optimization}
+\item{umap_min_dist_min}{the lower bound for the umap_min_dist parameter
+in the optimization}
 
-\item{scale_factor_max}{the upper bound for the scale_factor parameter in in the optimization}
+\item{scale_factor_max}{the upper bound for the scale_factor parameter in
+the optimization}
 
-\item{nfeatures_max}{the upper bound for the nfeatures parameter in in the optimization}
+\item{nfeatures_max}{the upper bound for the nfeatures parameter in the
+optimization}
 
-\item{dimensionality_max}{the upper bound for the dimensionality parameter in in the optimization}
+\item{dimensionality_max}{the upper bound for the dimensionality parameter
+in the optimization}
 
-\item{resolution_max}{the upper bound for the resolution parameter in in the optimization}
+\item{resolution_max}{the upper bound for the resolution parameter in
+the optimization}
 
-\item{umap_neighbors_max}{the upper bound for the umap_neighbors parameter in in the optimization}
+\item{umap_neighbors_max}{the upper bound for the umap_neighbors parameter
+in the optimization}
 
-\item{umap_min_dist_max}{the upper bound for the umap_min_dist parameter in in the optimization}
+\item{umap_min_dist_max}{the upper bound for the umap_min_dist parameter
+in the optimization}
 
-\item{num_processes}{the number of processes to run the fitness evaluation with - default is the minimum of number of individuals and available cores}
+\item{num_processes}{the number of processes to run the fitness evaluation
+with - default is the minimum of number of individuals and available cores}
 }
 \value{
 the optimized parameters of the evolution as named vector
 }
 \description{
-This function optimizes UMAP-based clustering pipeline parameters for single-cell RNA-seq data.
-Therefore, it treats the Seurat preprocessing and clustering workflow as an optimization problem,
-identifying the most appropriate configuration by the Calinski-Harabasz index.
-It evaluates clustering quality by measuring the ratio of between-cluster dispersion to within-cluster dispersion,
-given a set of data points in UMAP space and their cluster labels, which are derived from the PCA space.
+This function optimizes UMAP-based clustering pipeline parameters for
+single-cell RNA-seq data. Therefore, it treats the Seurat preprocessing and
+clustering workflow as an optimization problem, identifying the most
+appropriate configuration by the Calinski-Harabasz index.
+It evaluates clustering quality by measuring the ratio of between-cluster
+dispersion to within-cluster dispersion, given a set of data points in UMAP
+space and their cluster labels, which are derived from the PCA space.
 }
 \details{
 The core idea is:
@@ -95,7 +120,8 @@ The core idea is:
 \item Extract UMAP coordinates and cluster identities.
 \item Score the resulting clustering with the Calinski-Harabasz index.
 \item Use an evolutionary algorithm to explore the parameter space.
-\item Save the search result and export reporting artifacts for downstream analysis.
+\item Save the search result and export reporting artifacts for downstream
+analysis.
 }
 }
 \section{Parameter Optimization}{
@@ -111,52 +137,64 @@ The optimization includes the following parameters:
 \item \code{umap_min_dist}
 }
 
-Each parameter is optimized within predefined upper and lower bounds which can be set with the \verb{[parameter]_min} and \verb{[parameter]_max} function parameters.
-If \verb{[parameter]_min = [parameter]_max}, the parameter does not evolve. Note that the default parameters are always evaluated nonetheless.
-The default parameter values are based on the \href{https://satijalab.org/seurat/articles/pbmc3k_tutorial}{Seurat PBMC 3K tutorial}.
-Although all six parameters are numerically encoded as floating-point values during optimization, some are interpreted as integers later:
-\code{dimensionality} is rounded before use and \code{nfeatures} and \code{umap_neighbors} for analysis views.
+Each parameter is optimized within predefined upper and lower bounds which
+can be set with the \verb{[parameter]_min} and \verb{[parameter]_max} function
+parameters.
+If \verb{[parameter]_min = [parameter]_max}, the parameter does not evolve.
+Note that the default parameters are always evaluated nonetheless.
+The default parameter values are based on the \link{Seurat PBMC 3K tutorial}
+(https://satijalab.org/seurat/articles/pbmc3k_tutorial).
+Although all six parameters are numerically encoded as floating-point
+values during optimization, some are interpreted as integers later:
+\code{dimensionality} is rounded before use and \code{nfeatures} and
+\code{umap_neighbors} for analysis views.
 }
 
 \section{Evolution Configuration}{
 
 
-The evolution and clustering behavior can be modified by the function parameters:
+The evolution and clustering behavior can be modified by the function
+parameters:
 \itemize{
 \item which parameters are fixed and therefore excluded from exploration
 \item budget and population sizes for the evolutionary algorithm
 \item parent and survival selectors
 \item mutation regime
-The speed of mutation-rate adaptation is controlled by the \code{adapt_mutation_rate} parameter.
+The speed of mutation-rate adaptation is controlled by the
+\code{adapt_mutation_rate} parameter.
 }
 
-The \strong{parent and survival selection} uses a tournament selection for mating and a greedy replacement for survival.
-The survival strategy itself is configurable with the \code{survival_strategy} parameter:
+The \strong{parent and survival selection} uses a tournament selection for
+mating and a greedy replacement for survival.
+The survival strategy itself is configurable with the \code{survival_strategy}
+parameter:
 \itemize{
 \item \code{plus} means \code{(mu + lambda)} survival
 \item \code{comma} means \verb{(mu, lambda)} survival
 }
 
-The default is \code{plus}, meaning parents and offspring compete together for survival.
+The default is \code{plus}, meaning parents and offspring compete together for
+survival.
 }
 
 \section{Dataset}{
 
 
-The dataset to run the optimization with may be an h5 file or a 10X Genomics dataset.
-Both types are accepted by Seurat and read in by \code{Read10X(...)} / \code{Read10X_h5(...)} and \code{CreateSeuratObject(...)}.
+The dataset to run the optimization with may be an h5 file or a 10X
+Genomics dataset.
+Both types are accepted by Seurat and read in by \code{Read10X(...)} /
+\code{Read10X_h5(...)} and \code{CreateSeuratObject(...)}.
 After loading of the dataset, quality control filtering is applied:
 \itemize{
 \item mitochondrial percentage is computed with pattern \verb{^MT-}
 \item cells are retained only if:
-\itemize{
 \item \code{nFeature_RNA > 200}
 \item \code{nFeature_RNA < 2500}
 \item \code{percent_mt < 5}
 }
-}
 
-These QC filters are hard-coded and apply to all datasets, which is an important assumption of the project.
+These QC filters are hard-coded and apply to all datasets, which is an
+important assumption of the project.
 }
 
 \section{Seurat Pipeline Execution}{
@@ -173,22 +211,29 @@ For a candidate parameter set, the routine performs the following sequence:
 \item Compute UMAP using candidate \code{umap_neighbors} and \code{umap_min_dist}
 }
 
-This is an important design decision: the search is not optimizing a custom embedding model directly. It is optimizing
-hyperparameters of a standard Seurat workflow, and all fitness is derived from the resulting UMAP-plus-clustering state.
+This is an important design decision: the search is not optimizing a
+custom embedding model directly. It is optimizing
+hyperparameters of a standard Seurat workflow, and all fitness is derived
+from the resulting UMAP-plus-clustering state.
 }
 
 \section{Parallelization}{
 
 
-The evolution uses \code{parallelMap}, at level \code{ecr.evaluateFitness} to \strong{parallelize} the fitness evaluation for all individuals of the population.
-Therefore, each individual can be evaluated in a different parallelization unit.
-This is recommended because evaluating one individual means running a full Seurat pipeline, which is computationally expensive.
-The number of processes can be set with the \code{num_processes} function parameter.
+The evolution uses \code{parallelMap}, at level \code{ecr.evaluateFitness} to
+\strong{parallelize} the fitness evaluation for all individuals of the population.
+Therefore, each individual can be evaluated in a different parallelization
+unit. This is recommended because evaluating one individual means running a
+full Seurat pipeline, which is computationally expensive.
+The number of processes can be set with the \code{num_processes} function
+parameter.
 You can then disable parallelization by setting \code{num_processes = 1}.
 }
 
 \examples{
 run_optimization(data_dir = "/Users/myuser/Documents/mydata")
-run_optimization(data_dir = "../mydata", results_dir = ../mydata/optimization-results, mu = 2, lambda = 4, max_iterations = 8)
-run_optimization(data_dir = "../mydata", dimensionality_min = 6, dimensionality_max = 6, num_processes = 1)
+run_optimization(data_dir = "../mydata", results_dir = .. / mydata /
+optimization - results, mu = 2, lambda = 4, max_iterations = 8)
+run_optimization(data_dir = "../mydata", dimensionality_min = 6,
+dimensionality_max = 6, num_processes = 1)
 }
