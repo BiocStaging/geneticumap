@@ -10,7 +10,6 @@ sc_clustering_pipeline <- function(count_data, config, params, return_markers = 
 
     # quality control and cell selection
     seurat_obj[["percent_mt"]] <- Seurat::PercentageFeatureSet(seurat_obj, pattern = "^MT-")
-
     seurat_meta <- seurat_obj[[]]
     keep_cells <- seurat_meta$nFeature_RNA > config$sc_clustering$quality_thresholds$nFeature_RNA_min &
         seurat_meta$nFeature_RNA < config$sc_clustering$quality_thresholds$nFeature_RNA_max &

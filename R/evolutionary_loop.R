@@ -25,14 +25,13 @@ create_ecr_control <- function(fitness.fun, minimize, n.objectives, representati
 }
 
 evolution_loop <- function(fitness.fun, fitness.fun.name, minimize = NULL, n.objectives = 1L, n.dim = NULL,
-                           lower = NULL, upper = NULL, representation, mu, lambda, p.recomb = 0.7, p.mut = 0.3,
-                           survival.strategy = "plus", n.elite = 0L, log.stats = NULL, log.pop = FALSE,
-                           monitor = NULL, initial.solutions = NULL, parent.selector = NULL, survival.selector = NULL,
-                           mutator = NULL, max.iter = 100L, ...) {
+                        lower = NULL, upper = NULL, representation, mu, lambda, p.recomb = 0.7, p.mut = 0.3,
+                        survival.strategy = "plus", n.elite = 0L, log.stats = NULL, log.pop = FALSE,
+                        monitor = NULL, initial.solutions = NULL, parent.selector = NULL, survival.selector = NULL,
+                        mutator = NULL, max.iter = 100L, ...) {
     log_stats_list <- create_logging_setup(log.stats, fitness.fun.name, minimize)
     control <- create_ecr_control(fitness.fun, minimize, n.objectives, representation, mutator, parent.selector, survival.selector)
     log <- ecr::initLogger(control, log.stats = log_stats_list, log.pop = log.pop, init.size = 1000L)
-
     gen.fun <- ecr::genReal
     gen.pars <- list(n.dim = n.dim, lower = lower, upper = upper)
 
