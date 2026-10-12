@@ -2,9 +2,8 @@ plot_umap <- function(count_data, config, ind, filename, ...) {
     ind <- as.list(ind)
     names(ind) <- config$evolution$optimization_params
     umap_plot <- Seurat::DimPlot(sc_clustering_pipeline(count_data =
-        count_data, config = config, params = ind),
-        reduction = "umap", ...
-    ) + ggplot2::scale_color_discrete(name = "Cluster", labels = function(x)
+        count_data, config = config, params = ind), reduction = "umap", ...) +
+        ggplot2::scale_color_discrete(name = "Cluster", labels = function(x)
             paste("Cluster", x)) +
         ggplot2::theme(plot.margin = ggplot2::margin(5, 5, 0, 5))
     ggplot2::ggsave(filename = filename, plot = umap_plot, width = 210,
