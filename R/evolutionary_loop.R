@@ -4,7 +4,7 @@ create_logging_setup <- function(log.stats, fitness.fun.name, minimize) {
     for (stat in log.stats) {
         if (stat == "mean") {
             log_stats_list$fitness[[paste(fitness.fun.name, stat)]] <-
-                 list(fun = function(fitness) mean(as.numeric(fitness)))
+                list(fun = function(fitness) mean(as.numeric(fitness)))
         } else if (xor(stat == "worst", minimize)) {
             log_stats_list$fitness[[paste(fitness.fun.name, stat)]] <-
                 list(fun = function(fitness) min(as.numeric(fitness)))
@@ -88,7 +88,7 @@ evolution_loop <- function(fitness.fun, fitness.fun.name, minimize = NULL,
     fitness <- ecr::evaluateFitness(control, population)
 
     for (i in seq_along(population)) {
-         attr(population[[i]], "fitness") <- fitness[, i]
+        attr(population[[i]], "fitness") <- fitness[, i]
     }
 
     ecr::updateLogger(log, population, fitness = fitness, n.evals = mu)
