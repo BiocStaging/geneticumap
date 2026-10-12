@@ -191,7 +191,7 @@ run_evolution <- function(config, count_data) {
     ))
 }
 
-write_result <- function(count_data, res, results_dir, fitness_fun, config) {
+extract_best_candidate <- function(count_data, res, config) {
     # add marker genes, umap coordinates and cluster identities of the best
     # candidate to results object
     # extract and round parameters of best candidate
@@ -203,18 +203,25 @@ write_result <- function(count_data, res, results_dir, fitness_fun, config) {
     best.params[names(digits)] <- Map(\(x, d) if (d == 0L)
         as.integer(round(x)) else round(as.numeric(x), d),
         best.params[names(digits)], digits)
+
     # compute umap and find markers for best parameters
     best.result <- sc_clustering_pipeline(count_data = count_data, config =
         config, params = best.params, return_markers = TRUE)
-    res$best.markers <- best.result$markers
-    res$best.umap <- Seurat::Embeddings(best.result$data_obj, "umap")
-    res$best.clusters <- best.result$data_obj$seurat_clusters
-    res$best.seurat <- best.result$data_obj
+    best.markers <- best.result$markers
+    best.umap <- Seurat::Embeddings(best.result$data_obj, "umap")
+    best.clusters <- best.result$data_obj$seurat_clusters
+    best.seurat <- best.result$data_obj
 
+    return(list(best.params = best.params, best.markers = best.markers,
+        best.umap = best.umap, best.clusters = best.clusters,
+        best.seurat = best.seurat))
+}
+
+write_result <- function(count_data, res, results_dir, fitness_fun, config) {
     # export parameters, umap coordinates and cluster identities of result
     seurat_params_file <- file.path(results_dir,
         config$results$file_seurat_params)
-    jsonlite::write_json(best.params, seurat_params_file, pretty = TRUE,
+    jsonlite::write_json(res$best.params, seurat_params_file, pretty = TRUE,
         auto_unbox = TRUE)
 
     umap_coordinates_file <- file.path(results_dir,
@@ -255,6 +262,4 @@ write_result <- function(count_data, res, results_dir, fitness_fun, config) {
         message("Optional package 'htmlwidgets' is not installed. No
         interactive umap plot is generated.")
     }
-
-    return(best.params)
 }
