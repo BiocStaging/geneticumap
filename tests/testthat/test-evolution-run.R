@@ -76,7 +76,7 @@ test_that("Evolution runs successfully (single-threaded)", {
 
     # run evolution
     tryCatch({
-        result_params <- run_optimization(data_dir = "../testdata",
+        result_params <- run_optimization(data_dir = "../../inst/extdata/testdata",
             results_dir = results_dir, mu = 2, lambda = 4, max_iterations =
                 2, num_processes = 1)
 
@@ -101,12 +101,12 @@ test_that("Evolution runs successfully (single-threaded)", {
 test_that("Parameter checks fail as expected", {
     # survival_strategy not in possible choices
     expect_error({
-        run_optimization(data_dir = "../testdata", results_dir = results_dir,
+        run_optimization(data_dir = "../../inst/extdata/testdata", results_dir = results_dir,
             survival_strategy = "Something")
     })
     # dimensionality out of range (<50)
     expect_error({
-        run_optimization(data_dir = "../testdata", results_dir = results_dir,
+        run_optimization(data_dir = "../../inst/extdata/testdata", results_dir = results_dir,
             survival_strategy = "Something")
     })
 })
@@ -123,7 +123,7 @@ test_that("Evolution runs with fix parameter (with socket workers)", {
     default_dimensionality <- 10
     tryCatch({
         result_params <- run_optimization(
-            data_dir = "../testdata", results_dir = results_dir,
+            data_dir = "../../inst/extdata/testdata", results_dir = results_dir,
             dimensionality_min = fix_dimensionality,
             dimensionality_max = fix_dimensionality, mu = 2, lambda = 4,
             max_iterations = 2

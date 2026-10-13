@@ -194,6 +194,4 @@ Discrete integer parameters (such as PCA dimensions and neighbor counts) are opt
 rounded when passed to Seurat routines.
 
 ## References
-*We retrieved the testdataset included in this package from the Seurat pipeline (https://satijalab.org/seurat/articles/pbmc3k_tutorial) and converted it to h5. 
-The original source of the dataset is:
-10x Genomics. 3k PBMCs from a Healthy Donor, Single Cell Gene Expression Dataset by Cell Ranger v1.1.0. 2016. url: https://www.10xgenomics.com/welcome?closeUrl=%2Fdatasets&lastTouchOfferName=3k%20PBMCs%20from%20a%20Healthy%20Donor&lastTouchOfferType=Dataset&product=atera&redirectUrl=%2Fdatasets%2F3-k-pbm-cs-from-a-healthy-donor-1-standard-1-1-0
+The test dataset and example datasets included in this package are synthetic datasets. No biological interpretation can be deduced from the results retrieved from them.

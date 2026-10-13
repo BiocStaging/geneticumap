@@ -135,14 +135,7 @@ selected settings; open the interactive HTML file for cell-level exploration.
 
 ## References
 
-*We retrieved this test dataset from the
-[Seurat pipeline](https://satijalab.org/seurat/articles/pbmc3k_tutorial) and
-converted to h5. The original source of the dataset is:
-[10x Genomics. 3k PBMCs from a Healthy Donor, Single Cell Gene Expression
-Dataset by Cell Ranger v1.1.0. 2016](
-https://www.10xgenomics.com/welcome?closeUrl=%2Fdatasets&lastTouchOfferName=
-3k%20PBMCs%20from%20a%20Healthy%20Donor&lastTouchOfferType=Dataset&product=atera
-&redirectUrl=%2Fdatasets%2F3-k-pbm-cs-from-a-healthy-donor-1-standard-1-1-0).
+*the test dataset included in this package is a synthetic dataset. No biological interpretation can be deduced from the results retrieved from it.
 
 
 ## Session Information
