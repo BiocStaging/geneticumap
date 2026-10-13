@@ -24,9 +24,8 @@ load_count_data <- function(data_dir, gene_column) {
     return(counts)
 }
 
-# checks for a successful write access in the given directory, throws an
-# error with the given error_message on failure
-check_write_permissions <- function(directory, error_message) {
+# checks for a successful write access in the given directory
+check_write_permissions <- function(directory) {
     test_file_path <- file.path(directory, "permission-test")
     writeLines("test", con = test_file_path)
     if (file.exists(test_file_path)) {
@@ -358,8 +357,7 @@ run_optimization <- function(data_dir, results_dir = file.path(data_dir,
 
     # create results directory
     if (!dir.exists(results_dir)) dir.create(results_dir, showWarnings = TRUE)
-    check_write_permissions(results_dir, paste0("Missing write permissions on
-        result directory ", results_dir))
+    check_write_permissions(results_dir)
 
     # setup parallelization with socket workers
     on.exit(expr = parallelMap::parallelStop(), add = TRUE)
