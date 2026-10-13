@@ -325,11 +325,18 @@ internal_run_optimization <- function(config, data_dir, results_dir) {
 #' @export
 #' @returns the optimized parameters of the evolution as named vector
 #' @examples
-#' run_optimization(data_dir = "/Users/myuser/Documents/mydata")
-#' run_optimization(data_dir = "../mydata", results_dir = .. / mydata /
-#' optimization - results, mu = 2, lambda = 4, max_iterations = 8)
-#' run_optimization(data_dir = "../mydata", dimensionality_min = 6,
-#' dimensionality_max = 6, num_processes = 1)
+#' # load package example data
+#' data_dir <- system.file("extdata", "exampledata", package="geneticumap")
+#'
+#' # run simple example with multiple processes
+#' results_dir_1 <- file.path(tempdir(), "geneticumap-example-1")
+#' run_optimization(data_dir = data_dir, results_dir = results_dir_1, mu = 2,
+#'     lambda = 4, max_iterations = 8)
+#'
+#' # run simple example with single process and fix dimensionality
+#' results_dir_2 <- file.path(tempdir(), "geneticumap-example-2")
+#' run_optimization(data_dir = data_dir, results_dir = results_dir_2,
+#'     dimensionality_min = 6, dimensionality_max = 6, num_processes = 1)
 run_optimization <- function(data_dir, results_dir = file.path(data_dir,
     "results"), gene_column = 1, max_iterations = 10, mu = 5, lambda = 10,
     survival_strategy = "plus", probability_mutation = 1,
