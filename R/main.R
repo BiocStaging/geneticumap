@@ -27,17 +27,11 @@ load_count_data <- function(data_dir, gene_column) {
 # checks for a successful write access in the given directory, throws an
 # error with the given error_message on failure
 check_write_permissions <- function(directory, error_message) {
-    tryCatch({
-        test_file_path <- file.path(directory, "permission-test")
-        writeLines("test", con = test_file_path)
-        if (file.exists(test_file_path)) {
-            file.remove(test_file_path)
-        }
-    },
-        error = function() {
-            stop(error_message)
-        }
-    )
+    test_file_path <- file.path(directory, "permission-test")
+    writeLines("test", con = test_file_path)
+    if (file.exists(test_file_path)) {
+        file.remove(test_file_path)
+    }
 }
 
 # checks whether all parameters have valid data types and values
@@ -146,32 +140,27 @@ create_config <- function(results_dir, gene_column, max_iterations, mu,
 }
 
 internal_run_optimization <- function(config, data_dir, results_dir) {
-    tryCatch({
-        count_data <- load_count_data(data_dir, config$evolution$gene_column)
+    count_data <- load_count_data(data_dir, config$evolution$gene_column)
 
-        # exchange data with socket workers
-        parallelMap::parallelExport(objnames = c("get_umap_coords",
-            "fitness_function", "sc_clustering_pipeline", "config",
-            "count_data"))
+    # exchange data with socket workers
+    parallelMap::parallelExport(objnames = c("get_umap_coords",
+        "fitness_function", "sc_clustering_pipeline", "config",
+        "count_data"))
 
-        evolution_result <- run_evolution(config, count_data)
-        best_candidate <- extract_best_candidate(count_data, evolution_result,
-            config)
-        message("Optimization finished successfully")
+    evolution_result <- run_evolution(config, count_data)
+    best_candidate <- extract_best_candidate(count_data, evolution_result,
+        config)
+    message("Optimization finished successfully")
 
-        message("Writing result files...")
-        write_result(count_data = count_data, res = c(evolution_result,
-            best_candidate), results_dir = results_dir, config = config,
-            fitness_fun = fitness_function_factory(
-                function_selection = config$evolution$fitness_func,
-                count_data = count_data, config = config))
+    message("Writing result files...")
+    write_result(count_data = count_data, res = c(evolution_result,
+        best_candidate), results_dir = results_dir, config = config,
+        fitness_fun = fitness_function_factory(
+            function_selection = config$evolution$fitness_func,
+            count_data = count_data, config = config))
 
-        names(best_candidate$best.params) <- optimization_params
-        return(best_candidate$best.params)
-    }, error = function(e) {
-        stop(sprintf("An error occurred during optimization: %s",
-            e$message), call. = FALSE)
-    })
+    names(best_candidate$best.params) <- optimization_params
+    return(best_candidate$best.params)
 }
 
 #' Optimizes UMAP-based clustering pipeline parameters for single-cell
