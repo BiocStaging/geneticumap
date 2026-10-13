@@ -200,8 +200,8 @@ internal_run_optimization <- function(config, data_dir, results_dir) {
 #' parameters.
 #' If `[parameter]_min = [parameter]_max`, the parameter does not evolve.
 #' Note that the default parameters are always evaluated nonetheless.
-#' The default parameter values are based on the [Seurat PBMC 3K tutorial]
-#' (https://satijalab.org/seurat/articles/pbmc3k_tutorial).
+#' The default parameter values are based on the [Seurat PBMC 3K tutorial](
+#' https://satijalab.org/seurat/articles/pbmc3k_tutorial).
 #' Although all six parameters are numerically encoded as floating-point
 #' values during optimization, some are interpreted as integers later:
 #' `dimensionality` is rounded before use and `nfeatures` and

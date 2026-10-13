@@ -142,8 +142,7 @@ can be set with the \verb{[parameter]_min} and \verb{[parameter]_max} function
 parameters.
 If \verb{[parameter]_min = [parameter]_max}, the parameter does not evolve.
 Note that the default parameters are always evaluated nonetheless.
-The default parameter values are based on the \link{Seurat PBMC 3K tutorial}
-(https://satijalab.org/seurat/articles/pbmc3k_tutorial).
+The default parameter values are based on the \href{https://satijalab.org/seurat/articles/pbmc3k_tutorial}{Seurat PBMC 3K tutorial}.
 Although all six parameters are numerically encoded as floating-point
 values during optimization, some are interpreted as integers later:
 \code{dimensionality} is rounded before use and \code{nfeatures} and
