@@ -73,12 +73,13 @@ test_that("Evolution runs successfully (single-threaded)", {
     testthat::skip_if_not_installed("hdf5r")
 
     results_dir <- prepare_test_directory()
+    data_dir <- system.file("extdata", "testdata", package="geneticumap")
 
     # run evolution
     tryCatch({
-        result_params <- run_optimization(data_dir = "../../inst/extdata/testdata",
-            results_dir = results_dir, mu = 2, lambda = 4, max_iterations =
-                2, num_processes = 1)
+        result_params <- run_optimization(data_dir = data_dir, results_dir =
+            results_dir, mu = 2, lambda = 4, max_iterations = 2,
+            num_processes = 1)
 
         # check optimized parameters are in default ranges
         check_scale_factor_in_range(result_params$scale_factor)
@@ -99,15 +100,17 @@ test_that("Evolution runs successfully (single-threaded)", {
 
 # set invalid parameters and expect an error message
 test_that("Parameter checks fail as expected", {
+    data_dir <- system.file("extdata", "testdata", package="geneticumap")
+
     # survival_strategy not in possible choices
     expect_error({
-        run_optimization(data_dir = "../../inst/extdata/testdata", results_dir = results_dir,
+        run_optimization(data_dir = data_dir, results_dir = results_dir,
             survival_strategy = "Something")
     })
     # dimensionality out of range (<50)
     expect_error({
-        run_optimization(data_dir = "../../inst/extdata/testdata", results_dir = results_dir,
-            survival_strategy = "Something")
+        run_optimization(data_dir = data_dir, results_dir = results_dir,
+            dimensionality_max = 100)
     })
 })
 
@@ -117,13 +120,14 @@ test_that("Evolution runs with fix parameter (with socket workers)", {
     testthat::skip_if_not_installed("hdf5r")
 
     results_dir <- prepare_test_directory()
+    data_dir <- system.file("extdata", "testdata", package="geneticumap")
 
     # run evolution with fixed dimensionality
     fix_dimensionality <- 6
     default_dimensionality <- 10
     tryCatch({
         result_params <- run_optimization(
-            data_dir = "../../inst/extdata/testdata", results_dir = results_dir,
+            data_dir = data_dir, results_dir = results_dir,
             dimensionality_min = fix_dimensionality,
             dimensionality_max = fix_dimensionality, mu = 2, lambda = 4,
             max_iterations = 2
