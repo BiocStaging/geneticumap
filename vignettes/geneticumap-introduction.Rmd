@@ -72,7 +72,7 @@ package tests.
 ```{r import-package-and-data, message=FALSE, warning=FALSE, results='hide'}
 library(geneticumap)
 
-data_dir <- file.path("..", "tests", "testdata")
+data_dir <- system.file("extdata", "testdata", package="geneticumap")
 results_dir <- file.path(tempdir(), "geneticumap-vignette-results")
 ```
 
@@ -135,7 +135,8 @@ selected settings; open the interactive HTML file for cell-level exploration.
 
 ## References
 
-*the test dataset included in this package is a synthetic dataset. No biological interpretation can be deduced from the results retrieved from it.
+*The test dataset included in this package is a synthetic dataset. No biological
+interpretation can be deduced from the results retrieved from it.
 
 
 ## Session Information
