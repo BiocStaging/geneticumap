@@ -144,7 +144,7 @@ internal_run_optimization <- function(config, data_dir, results_dir) {
     # exchange data with socket workers
     parallelMap::parallelExport(objnames = c("get_umap_coords",
         "fitness_function", "sc_clustering_pipeline", "config",
-        "count_data"))
+        "count_data", "check_is_named_list_or_matrix", "select_cells"))
 
     evolution_result <- run_evolution(config, count_data)
     best_candidate <- extract_best_candidate(count_data, evolution_result,
