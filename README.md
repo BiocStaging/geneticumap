@@ -13,15 +13,28 @@ The core idea is:
 5. Use an evolutionary algorithm to explore the parameter space.
 6. Save the search result and export reporting artifacts for downstream analysis.
 
-The geneticUMAP package is developed at the [Institute of Medical Systems Biology of Ulm University](https://sysbio.uni-ulm.de).
+## Features
+
+- **Automated Parameter Optimization:** Systematically tunes normalization scale factors, number of variable features, PCA dimensions, clustering resolution, UMAP neighbors, and minimum distance.
+- **Self-Adaptive Evolutionary Search:** Utilizes adaptive mutation rates that evolve alongside parameters to navigate complex parameter landscapes efficiently.
+- **Parallel Processing:** Integrated with `parallelMap` to evaluate candidate parameter configurations concurrently.
+- **Comprehensive Artifact Generation:** Exports winner parameters as JSON, cluster and UMAP coordinate tables, static diagnostic plots, and interactive HTML UMAP visualizations with top cluster marker genes.
 
 ---
+
+## Authors
+
+Hanna Wagner (hanna.wagner@uni-ulm.de)  
+Lisa-Maria Winter (lisa-maria-1.winter@uni-ulm.de)  
+Dominik Dreiheller  
+
+The geneticUMAP package is developed at the [Institute of Medical Systems Biology of Ulm University](https://sysbio.uni-ulm.de).
 
 ## Associated Paper (Unpublished)
 
 **geneticUMAP: Objective and Robust Parameter Optimization for scRNA-Seq Data Visualization**
 
-**Authors:** Lisa-Maria Winter<sup>1,2</sup>, Hanna Wagner<sup>1</sup>, Dominik Dreiheller, Julian Schwab<sup>2</sup>, Johann M. Kraus<sup>1</sup>, and Hans A. Kestler<sup>1</sup>
+**Authors:** Lisa-Maria Winter<sup>1,2</sup>, Dominik Dreiheller, Hanna Wagner<sup>1</sup>, Julian Schwab<sup>2</sup>, Johann M. Kraus<sup>1</sup>, and Hans A. Kestler<sup>1</sup>
 
 <sup>1</sup> Ulm University, Institute of Medical Systems Biology  
 <sup>2</sup> Boehringer Ingelheim Pharma GmbH & Co. KG
@@ -35,14 +48,6 @@ The associated paper has not yet been published. Once published, please cite it,
 For non-sensitive data you can use our [web application](https://fermat.informatik.uni-ulm.de/geneticumap) 
 to run a parameter optimization in a comfortable user interface without any installation.
 
----
-
-## Features
-
-- **Automated Parameter Optimization:** Systematically tunes normalization scale factors, number of variable features, PCA dimensions, clustering resolution, UMAP neighbors, and minimum distance.
-- **Self-Adaptive Evolutionary Search:** Utilizes adaptive mutation rates that evolve alongside parameters to navigate complex parameter landscapes efficiently.
-- **Parallel Processing:** Integrated with `parallelMap` to evaluate candidate parameter configurations concurrently.
-- **Comprehensive Artifact Generation:** Exports winner parameters as JSON, cluster and UMAP coordinate tables, static diagnostic plots, and interactive HTML UMAP visualizations with top cluster marker genes.
 
 ---
 
