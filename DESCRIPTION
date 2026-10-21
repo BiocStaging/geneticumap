@@ -3,8 +3,8 @@ Title: Evolutionary Algorithm for UMAP-based Clustering Pipeline Parameter Optim
 Version: 0.99.6
 Date: 2026-10-20
 Authors@R: c(
-    person("Lisa-Maria", "Winter", email = "lisa-maria-1.winter@uni-ulm.de", role = c("aut")),
     person("Hanna", "Wagner", email = "hanna.wagner@uni-ulm.de", role = c("aut")),
+    person("Lisa-Maria", "Winter", email = "lisa-maria-1.winter@uni-ulm.de", role = c("aut")),
     person("Dominik", "Dreiheller", role = c("aut")),
     person("Hans A.", "Kestler", email = "hans.kestler@uni-ulm.de", role = c("cre"), comment=c(ORCID="0000-0002-4759-5254")))
 Description: The geneticumap package searches for single-cell clustering parameters by treating the Seurat preprocessing and clustering workflow
