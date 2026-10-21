@@ -1,7 +1,7 @@
 Package: geneticumap
 Title: Evolutionary Algorithm for UMAP-based Clustering Pipeline Parameter Optimization for Single-Cell RNA-Seq Data
-Version: 0.99.5
-Date: 2026-10-14
+Version: 0.99.6
+Date: 2026-10-20
 Authors@R: c(
     person("Lisa-Maria", "Winter", email = "lisa-maria-1.winter@uni-ulm.de", role = c("aut")),
     person("Hanna", "Wagner", email = "hanna.wagner@uni-ulm.de", role = c("aut")),
